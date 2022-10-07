@@ -5,11 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.*;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class CalculadoraApplication {
 
-//	@Autowired
-//	public static Aritmetica aritmetica;
 	private static final String SOMA = "+";
 	private static final String SUBTRACAO = "-";
 	private static final String MULTIPLICACAO = "*";
@@ -22,7 +20,6 @@ public class CalculadoraApplication {
 			Scanner usarCalculadora = new Scanner(System.in);
 			System.out.println("Digite \"ON\" para ligar ou \"OFF\" para desligar a calculadora:");
 			String respostaUsarCalculadora = usarCalculadora.nextLine();
-			//Qualquer valor pode entrar no Scanner, garantir que só valores numericos ou de pergunta
 			if (respostaUsarCalculadora.equals("ON") || respostaUsarCalculadora.equals("on")) {
 				while (respostaUsarCalculadora.equals("ON") || respostaUsarCalculadora.equals("on")) {
 					try {
@@ -31,62 +28,63 @@ public class CalculadoraApplication {
 						Double segundoValorInserido = null;
 						List<Double> listaDeValores = new ArrayList<>();
 						Scanner operadorInseridoScanner;
-						String operadorInserido = null;
+						String operadorInserido = "";
 
-						while (maisValores.equals("sim")) {
 							//Insere primeiro valor
-							while (Objects.isNull(primeiroValorInserido)){
+						while (Objects.isNull(primeiroValorInserido)){
+							try {
+								Scanner primeiroValor = new Scanner(System.in);
+								System.out.println("Valor:");
+								primeiroValorInserido = primeiroValor.nextDouble();
+								listaDeValores.add(primeiroValorInserido);
+							} catch (InputMismatchException e) {
+								System.out.println("Valor não numérico inserido. Por favor, insira uma valor numérico.");
+							}
+						}
+							//Insere Operador
+						while (!operadorInserido.equals(SOMA) && !operadorInserido.equals(SUBTRACAO)
+								&& !operadorInserido.equals(MULTIPLICACAO) && !operadorInserido.equals(DIVISAO)
+								&& !operadorInserido.equals(RAIZ_QUADRADA)) {
+
+							operadorInseridoScanner = new Scanner(System.in);
+							System.out.println("Insira o operador ('+' - adição, '-' - subtração, '*' - multiplicação, '/' - divisão, '%' - raiz quadrada):");
+							operadorInserido = operadorInseridoScanner.nextLine();
+
+							if (!operadorInserido.equals(SOMA) && !operadorInserido.equals(SUBTRACAO)
+									&& !operadorInserido.equals(MULTIPLICACAO) && !operadorInserido.equals(DIVISAO)
+									&& !operadorInserido.equals(RAIZ_QUADRADA)) {
+								System.out.println("Operador inválido");
+							}
+						}
+						if (!operadorInserido.equals("%")) {
+							//Insere Segundo valor
+							while (Objects.isNull(segundoValorInserido)) {
 								try {
-									Scanner primeiroValor = new Scanner(System.in);
+									Scanner segundoValor = new Scanner(System.in);
 									System.out.println("Valor:");
-									primeiroValorInserido = primeiroValor.nextDouble();
+									segundoValorInserido = segundoValor.nextDouble();
+									listaDeValores.add(segundoValorInserido);
 								} catch (InputMismatchException e) {
-									//TODO quando cair em exception, tratar para voltar ao codigo
 									System.out.println("Valor não numérico inserido. Por favor, insira uma valor numérico.");
 								}
 							}
-							//Insere Operador
-							while (!operadorInserido.equals(SOMA) && !operadorInserido.equals(SUBTRACAO)
-									&& !operadorInserido.equals(MULTIPLICACAO) && !operadorInserido.equals(DIVISAO)
-									&& !operadorInserido.equals(RAIZ_QUADRADA)) {
-
-								operadorInseridoScanner = new Scanner(System.in);
-								System.out.println("Insira o operador ('+' - adição, '-' - subtração, '*' - multiplicação, '/' - divisão, '%' - raiz quadrada):");
-								operadorInserido = operadorInseridoScanner.nextLine();
-
-								if (!operadorInserido.equals(SOMA) && !operadorInserido.equals(SUBTRACAO)
-										&& !operadorInserido.equals(MULTIPLICACAO) && !operadorInserido.equals(DIVISAO)
-										&& !operadorInserido.equals(RAIZ_QUADRADA)) {
-									System.out.println("Operador inválido");
-								}
-							}
-							if (!operadorInserido.equals("%") && Objects.nonNull(operadorInserido)) {
-								//Insere Segundo valor
-								while (Objects.isNull(segundoValorInserido)) {
-									try {
-										Scanner segundoValor = new Scanner(System.in);
-										System.out.println("Valor:");
-										segundoValorInserido = segundoValor.nextDouble();
-
-									} catch (InputMismatchException e) {
-										System.out.println("Valor não numérico inserido. Por favor, insira uma valor numérico.");
-									}
-								}
-								//Inserir mais valores
-								//TODO tratar caso digite outra coisa
-								Scanner terceiroValor = new Scanner(System.in);
-								System.out.println("Inserir mais valores? (sim / não)");
-								maisValores = terceiroValor.nextLine();
-
-								listaDeValores.add(segundoValorInserido);
-								listaDeValores.add(primeiroValorInserido);
-
-							} else {
-								//TODO Tratar para poder inserir mais valores
-								Scanner terceiroValor = new Scanner(System.in);
-								System.out.println("Inserir mais valores? (sim / não)");
-								maisValores = terceiroValor.nextLine();
-							}
+							//Inserir mais valores
+							//TODO tratar caso digite outra coisa
+//								while (maisValores.equals("sim") || maisValores.equals("s")) {
+//									Scanner terceiroValor = new Scanner(System.in);
+//									System.out.println("Inserir mais valores? (sim / não)");
+//									maisValores = terceiroValor.nextLine();
+//
+//									if (maisValores.equals("sim") || maisValores.equals("s")) {
+//										Double valor = maisValores();
+//										listaDeValores.add(valor);
+//									}
+//								}
+						} else {
+							//TODO Tratar para poder inserir mais valores
+							Scanner terceiroValor = new Scanner(System.in);
+							System.out.println("Inserir mais valores? (sim / não)");
+							maisValores = terceiroValor.nextLine();
 						}
 //							Scanner valorInseridoScanner1 = new Scanner(System.in);
 //							System.out.println("Valor:");
@@ -142,32 +140,50 @@ public class CalculadoraApplication {
 		}
 
 	private static Double adicao(List<Double> valor){
-		Double valorResultante = 0.0;
-		for (Double numero : valor){
-			valorResultante = valorResultante + numero;
-		}
+		Double valorResultante = valor.get(0) + valor.get(1);
 		return valorResultante;
 	}
 	private static Double subtracao(List<Double> valor){
-		Double valorResultante = 0.0;
-		for (Double numero : valor){
-			valorResultante = valorResultante - numero;
-		}
+		Double valorResultante = valor.get(0) - valor.get(1);
 		return valorResultante;
 	}
 	private static Double multiplicacao(List<Double> valor){
-		Double valorResultante = valor.get(1);
-		valorResultante = valorResultante * valor.get(0);
+		Double valorResultante = valor.get(0) * valor.get(1);
 		return valorResultante;
 	}
 	private static Double divisao(List<Double> valor){
-		Double valorResultante = valor.get(1);
-		valorResultante = valorResultante / valor.get(0);
+		Double valorResultante = valor.get(0) / valor.get(1);
 		return valorResultante;
 	}
 	private static Double raizQuadrada(Double valor){
 		Double valorResultante = Math.sqrt(valor);
 		return valorResultante;
 	}
+
+//	private static Double maisValores(){
+//		String operadorInserido = "";
+//		Double maisValores = null;
+//		Scanner terceiroValor = null;
+//
+//		while (!operadorInserido.equals(SOMA) && !operadorInserido.equals(SUBTRACAO)
+//				&& !operadorInserido.equals(MULTIPLICACAO) && !operadorInserido.equals(DIVISAO)
+//				&& !operadorInserido.equals(RAIZ_QUADRADA)) {
+//
+//			Scanner operadorInseridoScanner = new Scanner(System.in);
+//			System.out.println("Insira o operador ('+' - adição, '-' - subtração, '*' - multiplicação, '/' - divisão, '%' - raiz quadrada):");
+//			operadorInserido = operadorInseridoScanner.nextLine();
+//
+//			if (!operadorInserido.equals(SOMA) && !operadorInserido.equals(SUBTRACAO)
+//					&& !operadorInserido.equals(MULTIPLICACAO) && !operadorInserido.equals(DIVISAO)
+//					&& !operadorInserido.equals(RAIZ_QUADRADA)) {
+//				terceiroValor = new Scanner(System.in);
+//				System.out.println("Valor:");
+//				maisValores = terceiroValor.nextDouble();
+//			} else {
+//				System.out.println("Operador incorreto");
+//			}
+//		}
+//		return maisValores;
+//	}
 }
 
